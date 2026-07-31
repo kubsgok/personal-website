@@ -1,0 +1,614 @@
+@import "tailwindcss";
+
+/* Drive dark mode from a class on <html> instead of the OS setting, so the
+   toggle can override it. Dark is the default; adding `.light` switches it. */
+
+/* ------------------------------------------------------------------ */
+/* Design tokens                                                       */
+/* Dark is the default (values on :root). .light overrides them.       */
+/* ------------------------------------------------------------------ */
+:root {
+  --bg: #13160c;
+  --bg-elev: #191d0f;
+  --text: #e9ebde;
+  --text-secondary: #b4b7a8;
+  --text-muted: #8f9280;
+  --border: #2b2e1c;
+  --border-strong: #3a3e28;
+  --accent: #8bc34a;
+  --accent-strong: #9ccc5a;
+  --accent-soft: rgba(139, 195, 74, 0.16);
+  --accent-border: rgba(139, 195, 74, 0.4);
+  --rail-bg: #101208;
+  --shadow: rgba(0, 0, 0, 0.4);
+}
+
+:root.light {
+  --bg: #f4f1e8;
+  --bg-elev: #fbf9f2;
+  --text: #22231a;
+  --text-secondary: #55564a;
+  --text-muted: #7c7d6d;
+  --border: #ddd8c6;
+  --border-strong: #cbc5ad;
+  --accent: #558b2f;
+  --accent-strong: #497a29;
+  --accent-soft: rgba(85, 139, 47, 0.12);
+  --accent-border: rgba(85, 139, 47, 0.35);
+  --rail-bg: #ece8da;
+  --shadow: rgba(80, 70, 40, 0.14);
+}
+
+@theme inline {
+  --font-serif: var(--font-newsreader);
+  --font-sans: var(--font-inter);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Layout: fixed left icon rail + centered content column              */
+/* ------------------------------------------------------------------ */
+.rail {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 68px;
+  background: var(--rail-bg);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 22px 0;
+  z-index: 50;
+}
+
+.rail-spacer {
+  flex: 1;
+}
+
+.rail-btn {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.rail-btn:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.rail-btn.active {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.rail-btn svg {
+  width: 21px;
+  height: 21px;
+}
+
+/* Hover tooltip on the rail icons */
+.rail-btn[data-label]::after {
+  content: attr(data-label);
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12.5px;
+  padding: 5px 10px;
+  border-radius: 7px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  box-shadow: 0 4px 14px var(--shadow);
+  z-index: 60;
+}
+
+.rail-btn:hover::after {
+  opacity: 1;
+}
+
+.page {
+  margin-left: 68px;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 96px 32px 120px;
+}
+
+.container-wide {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 72px 32px 120px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Sections                                                            */
+/* ------------------------------------------------------------------ */
+.section {
+  scroll-margin-top: 32px;
+}
+
+.section + .section {
+  margin-top: 84px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 18px;
+  font-weight: 500;
+  font-family: var(--font-inter), sans-serif;
+}
+
+.section-title {
+  font-size: 26px;
+  margin: 0 0 26px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Hero                                                                */
+/* ------------------------------------------------------------------ */
+.hero {
+  display: flex;
+  gap: 34px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.hero-headline {
+  font-size: clamp(32px, 5vw, 44px);
+  margin: 0 0 22px;
+  letter-spacing: -0.01em;
+}
+
+.hero-headline .accent {
+  color: var(--accent);
+}
+
+.hero-bio {
+  color: var(--text-secondary);
+  font-size: 16.5px;
+  margin: 0 0 14px;
+  max-width: 54ch;
+}
+
+.facts {
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.facts li {
+  color: var(--text-muted);
+  font-size: 14.5px;
+  padding: 3px 0;
+}
+
+.portrait {
+  width: 132px;
+  height: 132px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-family: var(--font-newsreader), serif;
+  font-size: 34px;
+  overflow: hidden;
+}
+
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 26px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 7px 15px;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.chip:hover {
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+}
+
+.chip svg {
+  width: 15px;
+  height: 15px;
+  color: var(--accent);
+}
+
+/* ------------------------------------------------------------------ */
+/* Experience — vertical timeline                                      */
+/* ------------------------------------------------------------------ */
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--border-strong);
+}
+
+.tl-item {
+  position: relative;
+  padding-bottom: 26px;
+}
+
+.tl-item:last-child {
+  padding-bottom: 0;
+}
+
+.tl-item::before {
+  content: "";
+  position: absolute;
+  left: -28px;
+  top: 5px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--bg);
+}
+
+.tl-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.tl-role {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.tl-org {
+  color: var(--accent);
+  font-size: 14.5px;
+}
+
+.tl-dates {
+  color: var(--text-muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.tl-desc {
+  color: var(--text-secondary);
+  font-size: 14.5px;
+  margin: 6px 0 0;
+  max-width: 62ch;
+}
+
+/* ------------------------------------------------------------------ */
+/* Projects — card grid                                                */
+/* ------------------------------------------------------------------ */
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.project-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-elev);
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.15s ease;
+}
+
+.project-card:hover {
+  border-color: var(--accent-border);
+}
+
+.project-thumb {
+  height: 116px;
+  background: color-mix(in srgb, var(--accent) 14%, var(--bg-elev));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.project-thumb svg {
+  width: 34px;
+  height: 34px;
+  color: var(--accent);
+}
+
+.project-body {
+  padding: 15px 17px 17px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.project-title {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+
+.project-desc {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  margin: 0 0 13px;
+  line-height: 1.55;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.tag {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+  border-radius: 5px;
+  padding: 3px 8px;
+}
+
+.project-links {
+  margin-top: auto;
+  display: flex;
+  gap: 16px;
+}
+
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--accent);
+}
+
+.project-link svg {
+  width: 14px;
+  height: 14px;
+}
+
+.project-link:hover {
+  color: var(--accent-strong);
+}
+
+/* ------------------------------------------------------------------ */
+/* Photography — masonry + lightbox                                    */
+/* ------------------------------------------------------------------ */
+.photos-intro {
+  color: var(--text-secondary);
+  font-size: 16px;
+  margin: 0 0 34px;
+  max-width: 58ch;
+}
+
+.masonry {
+  column-count: 3;
+  column-gap: 14px;
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin: 0 0 14px;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: zoom-in;
+  display: block;
+  width: 100%;
+  background: var(--bg-elev);
+  border: none;
+  padding: 0;
+}
+
+.masonry-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity 0.2s ease;
+}
+
+.masonry-item:hover img {
+  opacity: 0.86;
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 9, 5, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 40px;
+}
+
+.lightbox img {
+  max-width: 90vw;
+  max-height: 82vh;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.lightbox-caption {
+  position: absolute;
+  bottom: 26px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 13.5px;
+}
+
+.lb-btn {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.lb-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.lb-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.lb-close {
+  top: 24px;
+  right: 28px;
+}
+
+.lb-prev {
+  left: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lb-next {
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ------------------------------------------------------------------ */
+/* Responsive: rail becomes a top bar; grids collapse                  */
+/* ------------------------------------------------------------------ */
+@media (max-width: 860px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+  .masonry {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 760px) {
+  .rail {
+    top: 0;
+    bottom: auto;
+    right: 0;
+    width: auto;
+    height: 58px;
+    flex-direction: row;
+    padding: 0 12px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    gap: 2px;
+  }
+  .rail-btn[data-label]::after {
+    left: 50%;
+    top: calc(100% + 8px);
+    transform: translateX(-50%);
+  }
+  .page {
+    margin-left: 0;
+    margin-top: 58px;
+  }
+  .container,
+  .container-wide {
+    padding-top: 56px;
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+  .hero {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .masonry {
+    column-count: 1;
+  }
+}
