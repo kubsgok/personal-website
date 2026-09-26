@@ -32,28 +32,41 @@ export default function PhotoGallery() {
     };
   }, [open, close, prev, next]);
 
+  const [hero, ...rest] = photos;
+
   return (
     <>
-      <div className="masonry">
-        {photos.map((photo, i) => (
-          <button
-            key={photo.src}
-            className="masonry-item"
-            onClick={() => setOpen(i)}
-            aria-label={`Open photo ${i + 1}`}
-          >
-            {/* Plain <img> so placeholder (picsum) images work with no config.
-                Swap src values in src/data/site.ts for your own photos. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={photo.src}
-              alt={photo.caption}
-              width={photo.width}
-              height={photo.height}
-              loading="lazy"
-            />
-          </button>
-        ))}
+      {/* Featured hero (photos[0]), then the rest in a 3-column grid. */}
+      <button
+        className="photo-hero"
+        onClick={() => setOpen(0)}
+        aria-label="Open featured photo"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={hero.src} alt={hero.caption || "Featured photograph"} />
+      </button>
+
+      <div className="photo-grid">
+        {rest.map((photo, idx) => {
+          const i = idx + 1;
+          return (
+            <button
+              key={photo.src}
+              className="photo-grid-item"
+              onClick={() => setOpen(i)}
+              aria-label={`Open photo ${i + 1}`}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={photo.src}
+                alt={photo.caption || `Photograph ${i + 1}`}
+                width={photo.width}
+                height={photo.height}
+                loading="lazy"
+              />
+            </button>
+          );
+        })}
       </div>
 
       {open !== null && (
@@ -74,7 +87,7 @@ export default function PhotoGallery() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={photos[open].src}
-            alt={photos[open].caption}
+            alt={photos[open].caption || `Photograph ${open + 1}`}
             onClick={(e) => e.stopPropagation()}
           />
           <button
@@ -87,9 +100,16 @@ export default function PhotoGallery() {
           >
             <ChevronRightIcon aria-hidden />
           </button>
-          <p className="lightbox-caption">
-            {open + 1} / {photos.length} · {photos[open].caption}
-          </p>
+          <div className="lightbox-caption">
+            {photos[open].caption && (
+              <span className="lightbox-caption-text">
+                {photos[open].caption}
+              </span>
+            )}
+            <span className="lightbox-caption-count">
+              {open + 1} / {photos.length}
+            </span>
+          </div>
         </div>
       )}
     </>

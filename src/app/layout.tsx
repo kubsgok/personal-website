@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
-import { Inter, Newsreader } from "next/font/google";
+import { Inter, Lora, Newsreader } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import { profile } from "@/data/site";
+
+// Body prose uses Lora (warm serif); Inter is kept for small UI labels/tooltips.
+const lora = Lora({
+  subsets: ["latin"],
+  variable: "--font-lora",
+  display: "swap",
+});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,7 +24,7 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: `${profile.name} — Portfolio`,
+  title: `${profile.name}'s Portfolio`,
   description: `${profile.name} is a CS major who builds. Projects, experience, and photography.`,
 };
 
@@ -37,7 +44,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${newsreader.variable}`}
+      className={`${lora.variable} ${inter.variable} ${newsreader.variable}`}
       suppressHydrationWarning
     >
       <head>

@@ -146,3 +146,34 @@ export const CodeIcon = (p: P) => (
     <path d="M15 8l4 4-4 4" />
   </svg>
 );
+
+export const DumbbellIcon = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M4 9v6M7 7.5v9M17 7.5v9M20 9v6" />
+    <path d="M7 12h10" />
+  </svg>
+);
+
+export const BookIcon = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M12 6.6C10.4 5.5 8 5 5.5 5.4v11.2c2.5-.4 4.9.1 6.5 1.2 1.6-1.1 4-1.6 6.5-1.2V5.4C16 5 13.6 5.5 12 6.6z" />
+    <path d="M12 6.6v11.4" />
+  </svg>
+);
+
+export const DatabaseIcon = (p: P) => (
+  <svg {...base} {...p}>
+    <ellipse cx="12" cy="6" rx="7" ry="2.5" />
+    <path d="M5 6v12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V6" />
+    <path d="M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5" />
+  </svg>
+);
+
+export const UsersIcon = (p: P) => (
+  <svg {...base} {...p}>
+    <circle cx="9" cy="8" r="3.2" />
+    <path d="M3.5 19a5.5 5.5 0 0 1 11 0" />
+    <path d="M16 5.3a3.2 3.2 0 0 1 0 5.4" />
+    <path d="M15.5 13.6A5.5 5.5 0 0 1 20.5 19" />
+  </svg>
+);

@@ -1,15 +1,6 @@
 import { profile } from "@/data/site";
-import { GithubIcon, LinkedinIcon, FileIcon, MailIcon } from "./icons";
-
-// Initials fallback shown until you drop a real photo into /public/portrait.jpg
-// (then uncomment the <img> below).
-function initials(name: string) {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join("");
-}
+import { GithubIcon, LinkedinIcon, MailIcon } from "./icons";
+import ResumeChip from "./ResumeChip";
 
 export default function Hero() {
   const { name, headlineLead, headlineAccent, bio, facts, links } = profile;
@@ -40,19 +31,16 @@ export default function Hero() {
           <a className="chip" href={links.linkedin} target="_blank" rel="noreferrer">
             <LinkedinIcon aria-hidden /> LinkedIn
           </a>
-          <a className="chip" href={links.resume} target="_blank" rel="noreferrer">
-            <FileIcon aria-hidden /> Resume
-          </a>
+          <ResumeChip href={links.resume} />
           <a className="chip" href={`mailto:${links.email}`}>
             <MailIcon aria-hidden /> Email
           </a>
         </div>
       </div>
 
-      <div className="portrait" aria-hidden>
-        {/* Drop a photo at /public/portrait.jpg and swap the initials for:
-            <img src="/portrait.jpg" alt="Portrait of ${name}" /> */}
-        {initials(name)}
+      <div className="portrait">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/portrait.jpg" alt={`Portrait of ${name}`} />
       </div>
     </section>
   );

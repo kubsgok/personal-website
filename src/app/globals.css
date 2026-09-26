@@ -48,10 +48,40 @@
   box-sizing: border-box;
 }
 
+/* Theme toggle: replace the default cross-fade with a custom circular reveal
+   (driven from Sidebar.tsx via the View Transitions API). Disable every default
+   animation so only our clip-path reveal plays — nothing else to stutter. */
+::view-transition-group(root) {
+  animation: none;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+/* Keep the old theme static beneath the new one as the circle expands. */
+::view-transition-old(root) {
+  z-index: 0;
+}
+::view-transition-new(root) {
+  z-index: 1;
+}
+
+/* Smooth-scroll when the rail nav jumps between sections. */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-lora), Georgia, serif;
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
 }
@@ -228,7 +258,10 @@ a {
 .facts li {
   color: var(--text-muted);
   font-size: 14.5px;
-  padding: 3px 0;
+  line-height: 1.5;
+  padding: 4px 0;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  white-space: nowrap;
 }
 
 .portrait {
@@ -251,6 +284,8 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 32%;
+  transform: scale(1.25);
 }
 
 .chips {
@@ -265,6 +300,7 @@ a {
   align-items: center;
   gap: 7px;
   font-size: 13.5px;
+  font-family: var(--font-inter), system-ui, sans-serif;
   color: var(--text);
   border: 1px solid var(--border-strong);
   border-radius: 999px;
@@ -345,13 +381,13 @@ a {
   color: var(--text-muted);
   font-size: 13px;
   white-space: nowrap;
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
 
 .tl-desc {
   color: var(--text-secondary);
   font-size: 14.5px;
   margin: 6px 0 0;
-  max-width: 62ch;
 }
 
 /* ------------------------------------------------------------------ */
@@ -392,6 +428,13 @@ a {
   color: var(--accent);
 }
 
+.project-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .project-body {
   padding: 15px 17px 17px;
   display: flex;
@@ -426,6 +469,7 @@ a {
   background: color-mix(in srgb, var(--text) 7%, transparent);
   border-radius: 5px;
   padding: 3px 8px;
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
 
 .project-links {
@@ -440,6 +484,7 @@ a {
   gap: 5px;
   font-size: 13px;
   color: var(--accent);
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
 
 .project-link svg {
@@ -458,35 +503,60 @@ a {
   color: var(--text-secondary);
   font-size: 16px;
   margin: 0 0 34px;
-  max-width: 58ch;
 }
 
-.masonry {
-  column-count: 3;
-  column-gap: 14px;
-}
-
-.masonry-item {
-  break-inside: avoid;
+/* Featured hero */
+.photo-hero {
+  display: block;
+  width: 100%;
   margin: 0 0 14px;
+  padding: 0;
+  border: none;
   border-radius: 10px;
   overflow: hidden;
   cursor: zoom-in;
-  display: block;
-  width: 100%;
   background: var(--bg-elev);
-  border: none;
-  padding: 0;
 }
 
-.masonry-item img {
+.photo-hero img {
   width: 100%;
-  height: auto;
+  aspect-ratio: 16 / 7;
+  object-fit: cover;
   display: block;
   transition: opacity 0.2s ease;
 }
 
-.masonry-item:hover img {
+.photo-hero:hover img {
+  opacity: 0.9;
+}
+
+/* 3-column grid for the remaining photos */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.photo-grid-item {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: zoom-in;
+  background: var(--bg-elev);
+}
+
+.photo-grid-item img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.2s ease;
+}
+
+.photo-grid-item:hover img {
   opacity: 0.86;
 }
 
@@ -511,12 +581,26 @@ a {
 
 .lightbox-caption {
   position: absolute;
-  bottom: 26px;
+  bottom: 24px;
   left: 0;
   right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
   text-align: center;
-  color: var(--text-secondary);
-  font-size: 13.5px;
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+/* The lightbox overlay is always dark, so use fixed light colors. */
+.lightbox-caption-text {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 14px;
+}
+
+.lightbox-caption-count {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12.5px;
 }
 
 .lb-btn {
@@ -561,18 +645,226 @@ a {
 }
 
 /* ------------------------------------------------------------------ */
+/* Publications                                                        */
+/* ------------------------------------------------------------------ */
+.pub-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pub-item {
+  display: block;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-elev);
+  transition: border-color 0.15s ease;
+}
+
+.pub-item:hover {
+  border-color: var(--accent-border);
+}
+
+.pub-title {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-size: 17px;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+.pub-title svg {
+  width: 15px;
+  height: 15px;
+  color: var(--accent);
+  flex: none;
+  margin-top: 4px;
+}
+
+.pub-meta {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ------------------------------------------------------------------ */
+/* Resume modal                                                        */
+/* ------------------------------------------------------------------ */
+.resume-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 9, 5, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 32px;
+  animation: resume-overlay-in 180ms ease-out both;
+}
+
+.resume-modal.closing {
+  animation: resume-overlay-out 170ms ease-in both;
+}
+
+.resume-panel {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: min(860px, 100%);
+  height: min(90vh, 100%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+  animation: resume-panel-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.resume-modal.closing .resume-panel {
+  animation: resume-panel-out 170ms ease-in both;
+}
+
+@keyframes resume-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes resume-overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes resume-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes resume-panel-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .resume-modal,
+  .resume-modal.closing,
+  .resume-panel,
+  .resume-modal.closing .resume-panel {
+    animation: none;
+  }
+}
+
+.resume-panel-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 12px 11px 16px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+.resume-panel-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.resume-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.resume-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--accent);
+  padding: 6px 10px;
+  border-radius: 7px;
+}
+
+.resume-action:hover {
+  background: var(--accent-soft);
+}
+
+.resume-action svg {
+  width: 14px;
+  height: 14px;
+}
+
+.resume-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.resume-close:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--text);
+}
+
+.resume-close svg {
+  width: 18px;
+  height: 18px;
+}
+
+.resume-frame {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: #fff;
+}
+
+/* ------------------------------------------------------------------ */
 /* Responsive: rail becomes a top bar; grids collapse                  */
 /* ------------------------------------------------------------------ */
 @media (max-width: 860px) {
   .project-grid {
     grid-template-columns: 1fr;
   }
-  .masonry {
-    column-count: 2;
+  .photo-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 760px) {
+  .resume-modal {
+    padding: 12px;
+  }
   .rail {
     top: 0;
     bottom: auto;
@@ -605,10 +897,16 @@ a {
     align-items: flex-start;
     gap: 22px;
   }
+  .facts li {
+    white-space: normal;
+  }
 }
 
 @media (max-width: 480px) {
-  .masonry {
-    column-count: 1;
+  .photo-grid {
+    grid-template-columns: 1fr;
+  }
+  .photo-hero img {
+    aspect-ratio: 3 / 2;
   }
 }

@@ -4,6 +4,9 @@ import {
   ChartIcon,
   PawIcon,
   CodeIcon,
+  DumbbellIcon,
+  DatabaseIcon,
+  UsersIcon,
   GithubIcon,
   ExternalIcon,
 } from "./icons";
@@ -13,6 +16,9 @@ const thumbIcons = {
   chart: ChartIcon,
   paw: PawIcon,
   code: CodeIcon,
+  dumbbell: DumbbellIcon,
+  database: DatabaseIcon,
+  users: UsersIcon,
 };
 
 const linkIcons = {
@@ -25,7 +31,22 @@ function Card({ project }: { project: Project }) {
   return (
     <article className="project-card">
       <div className="project-thumb">
-        <Thumb aria-hidden />
+        {project.image ? (
+          // A screenshot thumbnail overrides the icon glyph.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={project.image}
+            alt={`${project.title} preview`}
+            className="project-thumb-img"
+            style={
+              project.imagePosition
+                ? { objectPosition: project.imagePosition }
+                : undefined
+            }
+          />
+        ) : (
+          <Thumb aria-hidden />
+        )}
       </div>
       <div className="project-body">
         <h3 className="project-title">{project.title}</h3>
