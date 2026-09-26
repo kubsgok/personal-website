@@ -137,11 +137,13 @@ export const projects: Project[] = [
     title: "CineLog",
     description:
       "A movie-logging web app for searching films, logging what you've watched with star ratings, and tracking your viewing stats.",
-    tags: [],
+    tags: ["Node.js", "Express", "MongoDB", "JavaScript"],
     icon: "chart",
     image: "/projects/cinelog.png",
     imagePosition: "center top",
-    links: [],
+    links: [
+      { label: "Code", href: "https://github.com/kubsgok/cinelog", icon: "github" },
+    ],
   },
   {
     title: "JumBuddy",
