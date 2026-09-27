@@ -143,6 +143,7 @@ export const projects: Project[] = [
     imagePosition: "center top",
     links: [
       { label: "Code", href: "https://github.com/kubsgok/cinelog", icon: "github" },
+      { label: "Live", href: "https://cinelog-sigma-ten.vercel.app/", icon: "external" },
     ],
   },
   {
