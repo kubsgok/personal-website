@@ -192,14 +192,14 @@ export type Photo = {
 
 // The first photo is featured as the large hero at the top of the gallery.
 export const photos: Photo[] = [
-  { src: "/photos/IMG_9737.JPG", width: 3648, height: 2736, caption: "Mount Asahidake — Daisetsuzan, Hokkaido, Japan" },
+  { src: "/photos/IMG_9737.JPG", width: 3648, height: 2736, caption: "Mount Asahidake, Hokkaido, Japan" },
   { src: "/photos/IMG_9805.JPG", width: 3648, height: 2736, caption: "Lake Shikotsu, Hokkaido, Japan" },
   { src: "/photos/IMG_9866.JPG", width: 3648, height: 2736, caption: "Some plane window view (idk where I took this tbh)" },
-  { src: "/photos/IMG_9681.JPG", width: 3648, height: 2736, caption: "Cloudscape through the window, Japan" },
+  { src: "/photos/IMG_9681.JPG", width: 3648, height: 2736, caption: "Cloudscape through the window in Hokkaido, Japan" },
   { src: "/photos/IMG_9552.JPG", width: 3648, height: 2736, caption: "Shibuya at night, Tokyo, Japan" },
   { src: "/photos/IMG_9475.JPG", width: 3648, height: 2736, caption: "Henderson Waves, Singapore" },
-  { src: "/photos/IMG_2308.JPG", width: 3648, height: 2736, caption: "Game 7: Boston vs. Philadelphia" },
-  { src: "/photos/IMG_2542.JPG", width: 3648, height: 2736, caption: "Late-night excursion, Tufts University" },
+  { src: "/photos/IMG_2308.JPG", width: 3648, height: 2736, caption: "Game 7: Boston vs. Philly" },
+  { src: "/photos/IMG_2542.JPG", width: 3648, height: 2736, caption: "Late-night excursion at Tufts" },
   { src: "/photos/IMG_0745.JPG", width: 3648, height: 2736, caption: "Middlesex Fells, Medford, MA" },
   { src: "/photos/IMG_2426.JPG", width: 3648, height: 2736, caption: "Wynwood Walls, Miami" },
 ];
