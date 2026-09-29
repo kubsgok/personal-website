@@ -179,6 +179,17 @@ a {
   opacity: 1;
 }
 
+/* Touch devices (mobile): no hover popups, no sticky hover highlight. */
+@media (hover: none) {
+  .rail-btn[data-label]::after {
+    display: none;
+  }
+  .rail-btn:hover:not(.active) {
+    background: transparent;
+    color: var(--text-muted);
+  }
+}
+
 .page {
   margin-left: 68px;
   min-height: 100vh;
@@ -878,9 +889,7 @@ a {
     gap: 2px;
   }
   .rail-btn[data-label]::after {
-    left: 50%;
-    top: calc(100% + 8px);
-    transform: translateX(-50%);
+    display: none;
   }
   .page {
     margin-left: 0;
